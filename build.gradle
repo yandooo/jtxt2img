@@ -60,9 +60,9 @@ jar {
 
 dependencies {
     compile "org.slf4j:slf4j-api:${LIB_SLF4J_VER}"
-    compile "org.apache.commons:commons-lang3:${LIB_COMMON_LANG3}"
+    compile "org.apache.commons:commons-lang3:${LIB_COMMON_LANG3_VER}"
 
-    testCompile "junit:junit:${LIB_JUNIT}"
+    testCompile "junit:junit:${LIB_JUNIT_VER}"
 }
 
 task sourcesJar(type: Jar) {
