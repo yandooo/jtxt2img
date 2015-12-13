@@ -1,0 +1,145 @@
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2015 Oembedler Inc. and Contributors
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+ *  documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+ *  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+ *  persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+import java.text.SimpleDateFormat
+
+plugins {
+    id "com.jfrog.bintray" version "1.4"
+}
+
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+
+def releaseVersion = System.properties.RELEASE_VERSION
+version = releaseVersion ? releaseVersion : PROJECT_VERSION + '-' + new SimpleDateFormat('yyyy-MM-dd\'T\'HH-mm-ss').format(new Date())
+group = PROJECT_GROUP
+
+repositories {
+    jcenter()
+}
+
+idea {
+    project {
+        jdkName = "${TARGET_COMPATIBILITY}"
+        languageLevel = "${TARGET_COMPATIBILITY}"
+        vcs = "${VCS}"
+    }
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+compileJava {
+    sourceCompatibility = "${SOURCE_COMPATIBILITY}"
+    targetCompatibility = "${TARGET_COMPATIBILITY}"
+}
+
+jar {
+    from "LICENSE.md"
+}
+
+dependencies {
+    compile "org.slf4j:slf4j-api:${LIB_SLF4J_VER}"
+    compile "org.apache.commons:commons-lang3:${LIB_COMMON_LANG3}"
+
+    testCompile "junit:junit:${LIB_JUNIT}"
+}
+
+task sourcesJar(type: Jar) {
+    dependsOn classes
+    classifier 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+
+publishing {
+    publications {
+        jtxt2img(MavenPublication) {
+            version version
+            from components.java
+
+            artifact sourcesJar {
+                classifier "sources"
+            }
+            artifact javadocJar {
+                classifier "javadoc"
+            }
+            pom.withXml {
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+                    name 'jtxt2img'
+                    description 'Java Text to Image Library'
+                    url "https://github.com/clajder/jtxt2img"
+                    scm {
+                        url "https://github.com/clajder/jtxt2img"
+                        connection "https://github.com/clajder/jtxt2img"
+                        developerConnection "https://github.com/clajder/jtxt2img"
+                    }
+                    licenses {
+                        license {
+                            name 'MIT'
+                            url 'https://github.com/clajder/jtxt2img/blob/master/LICENSE.md'
+                            distribution 'repo'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id 'clajder'
+                            name 'Anton Y'
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+bintray {
+    user = System.env.BINTRAY_USER ?: project["bintray.user"]
+    key = System.env.BINTRAY_API_KEY ?: project["bintray.key"]
+    publications = ['jtxt2img']
+    publish = true
+    pkg {
+        repo = 'jtxt2img'
+        name = 'jtxt2img'
+        desc = 'Java Text to Image Library'
+        licenses = ['MIT']
+        vcsUrl = 'https://github.com/clajder/jtxt2img'
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.9'
+}
