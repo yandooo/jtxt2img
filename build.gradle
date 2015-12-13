@@ -132,7 +132,7 @@ bintray {
     publications = ['jtxt2img']
     publish = true
     pkg {
-        repo = 'jtxt2img'
+        repo = 'maven'
         name = 'jtxt2img'
         desc = 'Java Text to Image Library'
         licenses = ['MIT']
