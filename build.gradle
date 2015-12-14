@@ -76,6 +76,9 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
 }
 
+test {
+    environment 'IMG_OUTPUT', project.buildDir
+}
 
 artifacts {
     archives sourcesJar

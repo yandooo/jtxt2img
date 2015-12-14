@@ -17,63 +17,38 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.embedler.moon.jtxt2img;
+package com.embedler.moon.jtxt2img.test;
 
-public class TextProperties {
+import com.embedler.moon.jtxt2img.JTxt2Img;
+import com.embedler.moon.jtxt2img.TextProperties;
+import org.junit.Before;
+import org.junit.Test;
 
-    private String bgColor;
-    private String fgColor;
-    private String text;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
-    private Integer height;
-    private Integer width;
-    private String format;
+public class ImgsTest {
 
-    public String getBgColor() {
-        return bgColor;
+    private String outputDirectory;
+
+    @Before
+    public void before() {
+        outputDirectory = System.getenv("IMG_OUTPUT");
     }
 
-    public void setBgColor(String bgColor) {
-        this.bgColor = bgColor;
-    }
+    @Test
+    public void simpleTest() {
+        TextProperties textProperties = new TextProperties();
 
-    public String getFgColor() {
-        return fgColor;
-    }
+        textProperties.setBgColor("876");
+        textProperties.setFgColor("754");
+        textProperties.setFormat("jpg");
+        textProperties.setWidth(200);
+        textProperties.setHeight(200);
+        textProperties.setText("hello-txt");
 
-    public void setFgColor(String fgColor) {
-        this.fgColor = fgColor;
-    }
+        BufferedImage bufferedImage = JTxt2Img.createBufferedImage(textProperties);
+        JTxt2Img.write(new File(outputDirectory, "hello-text.jpg"), bufferedImage, "jpg");
 
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public Integer getHeight() {
-        return height;
-    }
-
-    public void setHeight(Integer height) {
-        this.height = height;
-    }
-
-    public Integer getWidth() {
-        return width;
-    }
-
-    public void setWidth(Integer width) {
-        this.width = width;
-    }
-
-    public String getFormat() {
-        return format;
-    }
-
-    public void setFormat(String format) {
-        this.format = format;
     }
 }

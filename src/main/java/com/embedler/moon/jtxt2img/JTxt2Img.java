@@ -30,13 +30,15 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.IndexColorModel;
-import java.io.IOException;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Iterator;
 
-public class Imgs {
+public class JTxt2Img {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Imgs.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JTxt2Img.class);
 
     public static ImageTextSettings calculateImageTextSettings(String text, int w, int h, Font font, int imageType) {
         ImageTextSettings imageTextSettings = new ImageTextSettings();
@@ -97,7 +99,7 @@ public class Imgs {
         return image;
     }
 
-    private BufferedImage generateMappedImagePlaceholder(TextProperties textProperties) throws IOException {
+    public static BufferedImage createBufferedImage(TextProperties textProperties) {
         final TextPropertiesAccessor textPropertiesAccessor = new TextPropertiesAccessor(textProperties);
 
         final String textToDraw = textPropertiesAccessor.getText();
@@ -129,5 +131,49 @@ public class Imgs {
         g.dispose();
 
         return targetMappedBufferedImage;
+    }
+
+    public static boolean write(String fileName, BufferedImage image, String format) {
+        boolean result = false;
+        try {
+            File file = File.createTempFile(fileName, "." + format);
+            result = write(file, image, format);
+        } catch (Exception e) {
+            String msg = "Can't write image placeholder to the file [" + fileName + "]";
+            if (LOG.isErrorEnabled())
+                LOG.error(msg);
+            throw new JTxt2ImgIoRuntimeException(msg, e);
+        }
+        return result;
+    }
+
+    public static boolean write(File file, BufferedImage image, String format) {
+        boolean result = false;
+        try (OutputStream os = new FileOutputStream(file)) {
+            result = write(os, image, format);
+        } catch (Exception e) {
+
+        }
+
+        return result;
+    }
+
+    public static boolean write(OutputStream outputStream, BufferedImage image, String format) {
+        boolean result = false;
+        try {
+            result = ImageIO.write(image, format, outputStream);
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (Exception e) {
+                }
+            }
+        } catch (Exception e) {
+            String msg = "Can't write image placeholder to the out stream";
+            if (LOG.isErrorEnabled())
+                LOG.error(msg);
+            throw new JTxt2ImgIoRuntimeException(msg, e);
+        }
+        return result;
     }
 }

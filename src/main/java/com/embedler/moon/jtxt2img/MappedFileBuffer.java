@@ -23,7 +23,6 @@ import org.apache.commons.lang3.Validate;
 
 import java.awt.image.DataBuffer;
 import java.io.File;
-import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.*;
 import java.nio.channels.FileChannel;
@@ -40,7 +39,7 @@ public abstract class MappedFileBuffer extends DataBuffer {
     private final File tempFile;
     private final MappedByteBuffer byteBuffer;
 
-    private MappedFileBuffer(final int type, final int size, final int numBanks) throws IOException {
+    private MappedFileBuffer(final int type, final int size, final int numBanks) {
         super(type, size, numBanks);
 
         Validate.isTrue(size >= 0, "Integer overflow for size: %d", size);
@@ -48,32 +47,36 @@ public abstract class MappedFileBuffer extends DataBuffer {
 
         int componentSize = DataBuffer.getDataTypeSize(type) / 8;
 
-        tempFile = File.createTempFile(String.format("%s-", getClass().getSimpleName().toLowerCase()), ".tmp");
-        try (RandomAccessFile raf = new RandomAccessFile(tempFile, "rw");
-             FileChannel channel = raf.getChannel()) {
+        try {
+            tempFile = File.createTempFile(String.format("%s-", getClass().getSimpleName().toLowerCase()), ".tmp");
+            try (RandomAccessFile raf = new RandomAccessFile(tempFile, "rw");
+                 FileChannel channel = raf.getChannel()) {
 
-            long length = ((long) size) * componentSize * numBanks;
-            raf.setLength(length);
+                long length = ((long) size) * componentSize * numBanks;
+                raf.setLength(length);
 
-            byteBuffer = channel.map(FileChannel.MapMode.READ_WRITE, 0, length);
+                byteBuffer = channel.map(FileChannel.MapMode.READ_WRITE, 0, length);
 
-            switch (type) {
-                case DataBuffer.TYPE_BYTE:
-                    buffer = byteBuffer;
-                    break;
-                case DataBuffer.TYPE_USHORT:
-                    buffer = byteBuffer.asShortBuffer();
-                    break;
-                case DataBuffer.TYPE_INT:
-                    buffer = byteBuffer.asIntBuffer();
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unsupported data type: " + type);
+                switch (type) {
+                    case DataBuffer.TYPE_BYTE:
+                        buffer = byteBuffer;
+                        break;
+                    case DataBuffer.TYPE_USHORT:
+                        buffer = byteBuffer.asShortBuffer();
+                        break;
+                    case DataBuffer.TYPE_INT:
+                        buffer = byteBuffer.asIntBuffer();
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Unsupported data type: " + type);
+                }
+            } finally {
+                if (!tempFile.delete()) {
+                    tempFile.deleteOnExit();
+                }
             }
-        } finally {
-            if (!tempFile.delete()) {
-                tempFile.deleteOnExit();
-            }
+        } catch (Exception e) {
+            throw new JTxt2ImgIoRuntimeException(e);
         }
     }
 
@@ -86,7 +89,7 @@ public abstract class MappedFileBuffer extends DataBuffer {
         return String.format("MappedFileBuffer: %s", buffer);
     }
 
-    public static DataBuffer create(final int type, final int size, final int numBanks) throws IOException {
+    public static DataBuffer create(final int type, final int size, final int numBanks) {
         switch (type) {
             case DataBuffer.TYPE_BYTE:
                 return new DataBufferByte(size, numBanks);
@@ -95,14 +98,14 @@ public abstract class MappedFileBuffer extends DataBuffer {
             case DataBuffer.TYPE_INT:
                 return new DataBufferInt(size, numBanks);
             default:
-                throw new IllegalArgumentException("Unsupported data type: " + type);
+                throw new JTxt2ImgIoRuntimeException("Unsupported data type: " + type);
         }
     }
 
     final static class DataBufferByte extends MappedFileBuffer {
         private final ByteBuffer buffer;
 
-        public DataBufferByte(int size, int numBanks) throws IOException {
+        public DataBufferByte(int size, int numBanks) {
             super(DataBuffer.TYPE_BYTE, size, numBanks);
             buffer = (ByteBuffer) super.buffer;
         }
@@ -121,7 +124,7 @@ public abstract class MappedFileBuffer extends DataBuffer {
     final static class DataBufferUShort extends MappedFileBuffer {
         private final ShortBuffer buffer;
 
-        public DataBufferUShort(int size, int numBanks) throws IOException {
+        public DataBufferUShort(int size, int numBanks) {
             super(DataBuffer.TYPE_USHORT, size, numBanks);
             buffer = (ShortBuffer) super.buffer;
         }
@@ -140,7 +143,7 @@ public abstract class MappedFileBuffer extends DataBuffer {
     final static class DataBufferInt extends MappedFileBuffer {
         private final IntBuffer buffer;
 
-        public DataBufferInt(int size, int numBanks) throws IOException {
+        public DataBufferInt(int size, int numBanks) {
             super(DataBuffer.TYPE_INT, size, numBanks);
             buffer = (IntBuffer) super.buffer;
         }

@@ -82,7 +82,7 @@ public class TextPropertiesAccessor {
             Matcher m = CoreHelper.COLOR_REGEXP.matcher(textProperties.getFgColor());
             if (m.matches()) {
                 String temp = m.group(1);
-                if (NumberUtils.isNumber("0x" + fgColor)) {
+                if (NumberUtils.isNumber("0x" + temp)) {
                     fgColor = CoreHelper.hex2Rgb(temp);
                 }
             }
@@ -109,7 +109,7 @@ public class TextPropertiesAccessor {
             Matcher m = CoreHelper.COLOR_REGEXP.matcher(textProperties.getBgColor());
             if (m.matches()) {
                 String temp = m.group(1);
-                if (NumberUtils.isNumber("0x" + bgColor)) {
+                if (NumberUtils.isNumber("0x" + temp)) {
                     bgColor = CoreHelper.hex2Rgb(temp);
                 }
             }

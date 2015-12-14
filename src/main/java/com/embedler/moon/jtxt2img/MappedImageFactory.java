@@ -45,29 +45,29 @@ public final class MappedImageFactory {
     private MappedImageFactory() {
     }
 
-    public static BufferedImage createCompatibleMappedImage(int width, int height, int type) throws IOException {
+    public static BufferedImage createCompatibleMappedImage(int width, int height, int type) {
         BufferedImage temp = new BufferedImage(1, 1, type);
         return createCompatibleMappedImage(width, height, temp.getSampleModel().createCompatibleSampleModel(width, height), temp.getColorModel());
     }
 
-    public static BufferedImage createCompatibleMappedImage(int width, int height, int type, IndexColorModel colorModel) throws IOException {
+    public static BufferedImage createCompatibleMappedImage(int width, int height, int type, IndexColorModel colorModel)  {
         BufferedImage temp = new BufferedImage(1, 1, type, colorModel);
         return createCompatibleMappedImage(width, height, temp.getSampleModel().createCompatibleSampleModel(width, height), temp.getColorModel());
     }
 
-    public static BufferedImage createCompatibleMappedImage(int width, int height, GraphicsConfiguration configuration, int transparency) throws IOException {
+    public static BufferedImage createCompatibleMappedImage(int width, int height, GraphicsConfiguration configuration, int transparency)  {
         return createCompatibleMappedImage(width, height, configuration.getColorModel(transparency));
     }
 
-    public static BufferedImage createCompatibleMappedImage(int width, int height, ImageTypeSpecifier type) throws IOException {
+    public static BufferedImage createCompatibleMappedImage(int width, int height, ImageTypeSpecifier type)  {
         return createCompatibleMappedImage(width, height, type.getSampleModel(width, height), type.getColorModel());
     }
 
-    static BufferedImage createCompatibleMappedImage(int width, int height, ColorModel cm) throws IOException {
+    static BufferedImage createCompatibleMappedImage(int width, int height, ColorModel cm) {
         return createCompatibleMappedImage(width, height, cm.createCompatibleSampleModel(width, height), cm);
     }
 
-    public static BufferedImage createCompatibleMappedImage(int width, int height, SampleModel sm, ColorModel cm) throws IOException {
+    public static BufferedImage createCompatibleMappedImage(int width, int height, SampleModel sm, ColorModel cm) {
         DataBuffer buffer = MappedFileBuffer.create(sm.getTransferType(), width * height * sm.getNumDataElements(), 1);
 
         return new BufferedImage(cm, RASTER_FACTORY.createRaster(sm, buffer, new Point()), cm.isAlphaPremultiplied(), null);
