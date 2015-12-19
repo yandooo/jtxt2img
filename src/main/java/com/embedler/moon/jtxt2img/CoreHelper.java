@@ -20,32 +20,12 @@ package com.embedler.moon.jtxt2img;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
-import sun.nio.ch.FileChannelImpl;
 
 import java.awt.*;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.Method;
-import java.nio.ByteBuffer;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
-import java.nio.channels.WritableByteChannel;
-import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
 import java.util.regex.Pattern;
 
 public enum CoreHelper {
     ;
-    public static final String DEFAULT_CHARSET_NAME = "UTF-8";
-    public static final Charset DEFAULT_CHARSET = Charset.forName(DEFAULT_CHARSET_NAME);
-    public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
-    public static final TimeZone DEFAULT_TIMEZONE = TimeZone.getTimeZone("GMT");
 
     public static final String SIZE_REGEXP_STR = "(\\d{1,5})(x)?(\\d{1,5})?(\\.(png|jpg|jpeg|gif))?";
     public static final Pattern SIZE_REGEXP = Pattern.compile(SIZE_REGEXP_STR);
@@ -80,60 +60,4 @@ public enum CoreHelper {
         Validate.notNull(color, "Color must not be null");
         return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
     }
-
-    public static void fastChannelCopy(final InputStream src, final OutputStream dest) throws IOException {
-        try (ReadableByteChannel inputChannel = Channels.newChannel(src);
-             WritableByteChannel outputChannel = Channels.newChannel(dest)) {
-            fastChannelCopy(inputChannel, outputChannel);
-        }
-    }
-
-    public static void fastChannelCopy(final ReadableByteChannel src, final WritableByteChannel dest) throws IOException {
-        final ByteBuffer buffer = ByteBuffer.allocateDirect(16 * 1024);
-        while (src.read(buffer) != -1) {
-            // prepare the buffer to be drained
-            buffer.flip();
-            // write to the channel, may block
-            dest.write(buffer);
-            // If partial transfer, shift remainder down
-            // If buffer is empty, same as doing clear()
-            buffer.compact();
-        }
-        // EOF will leave buffer in fill state
-        buffer.flip();
-        // make sure the buffer is fully drained.
-        while (buffer.hasRemaining()) {
-            dest.write(buffer);
-        }
-    }
-
-    public static void unmap(final MappedByteBuffer buffer) {
-        if (null == buffer) {
-            return;
-        }
-        try {
-            final Method method = FileChannelImpl.class.getDeclaredMethod("unmap", MappedByteBuffer.class);
-            method.setAccessible(true);
-            method.invoke(null, buffer);
-        } catch (final Exception ex) {
-            //fails silently
-        }
-    }
-
-    public static Calendar getCalendar() {
-        return Calendar.getInstance(DEFAULT_TIMEZONE);
-    }
-
-    public static String getCurrentMonth() {
-        return new SimpleDateFormat("MMM").format(getCalendar().getTime());
-    }
-
-    public static Date getCurrentDate() {
-        return getCalendar().getTime();
-    }
-
-    public static long getCurrentTime() {
-        return getCalendar().getTimeInMillis();
-    }
-
 }
