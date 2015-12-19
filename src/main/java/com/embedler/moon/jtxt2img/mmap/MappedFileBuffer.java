@@ -17,8 +17,9 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.embedler.moon.jtxt2img;
+package com.embedler.moon.jtxt2img.mmap;
 
+import com.embedler.moon.jtxt2img.JTxt2ImgIoRuntimeException;
 import org.apache.commons.lang3.Validate;
 
 import java.awt.image.DataBuffer;
@@ -31,8 +32,6 @@ import java.nio.channels.FileChannel;
  * A {@code DataBuffer} implementation that is backed by a memory mapped file.
  * Memory will be allocated outside the normal JVM heap, allowing more efficient
  * memory usage for large buffers
- *
- * @see FileChannel#map(FileChannel.MapMode, long, long)
  */
 public abstract class MappedFileBuffer extends DataBuffer {
     private final Buffer buffer;

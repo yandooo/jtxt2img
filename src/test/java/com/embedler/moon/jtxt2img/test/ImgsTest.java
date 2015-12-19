@@ -40,15 +40,25 @@ public class ImgsTest {
     public void simpleTest() {
         TextProperties textProperties = new TextProperties();
 
-        textProperties.setBgColor("876");
-        textProperties.setFgColor("754");
-        textProperties.setFormat("jpg");
-        textProperties.setWidth(200);
-        textProperties.setHeight(200);
-        textProperties.setText("hello-txt");
+        textProperties.setBgColor("167");
+        textProperties.setFgColor("945");
+        textProperties.setFormat("png");
+        textProperties.setWidth(10);
+        textProperties.setHeight(10);
 
-        BufferedImage bufferedImage = JTxt2Img.createBufferedImage(textProperties);
-        JTxt2Img.write(new File(outputDirectory, "hello-text.jpg"), bufferedImage, "jpg");
+        String fontsDir = outputDirectory + File.separator + "fonts";
+        new File(fontsDir).mkdirs();
+        for (int i = 0; i < 9; i++) {
+            String name = String.valueOf(1);
+            textProperties.setText(name);
+            BufferedImage bufferedImage = JTxt2Img.createBufferedImage(textProperties);
+            String fontFolder = fontsDir + File.separator + "font_1";
+            File file = new File(fontFolder);
+            file.mkdirs();
+
+            file = new File(fontFolder, name + ".png");
+            JTxt2Img.write(file, bufferedImage, "png");
+        }
 
     }
 }

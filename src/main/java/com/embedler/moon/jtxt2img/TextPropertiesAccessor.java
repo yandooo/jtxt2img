@@ -43,6 +43,18 @@ public class TextPropertiesAccessor {
                 isValidFormat();
     }
 
+    public boolean isValidFont() {
+        return textProperties.getFont() != null;
+    }
+
+    public Font getDefaultFont() {
+        return CoreHelper.DEF_PLACEHOLDER_FONT;
+    }
+
+    public Font getFont() {
+        return isValidFont() ? textProperties.getFont() : getDefaultFont();
+    }
+
     public boolean isValidFormat() {
         return StringUtils.isNotBlank(textProperties.getFormat());
     }
@@ -56,7 +68,7 @@ public class TextPropertiesAccessor {
     }
 
     public String getDefaultText() {
-        return StringUtils.join(textProperties.getWidth(), "x", textProperties.getHeight());
+        return StringUtils.join(getWidth(), "x", getHeight());
     }
 
     public String getText() {
@@ -122,7 +134,7 @@ public class TextPropertiesAccessor {
     }
 
     public int getDefaultHeight() {
-        return CoreHelper.DEF_PLACEHOLDER_MAX_HEIGHT;
+        return CoreHelper.DEF_PLACEHOLDER_HEIGHT;
     }
 
     public boolean isValidWidth() {
@@ -130,11 +142,11 @@ public class TextPropertiesAccessor {
         return width <= CoreHelper.DEF_PLACEHOLDER_MAX_WIDTH && width >= CoreHelper.DEF_PLACEHOLDER_MIN_WIDTH;
     }
 
-    public int getHeight(){
+    public int getHeight() {
         return isValidHeight() ? textProperties.getHeight() : getDefaultHeight();
     }
 
-    public int getWidth(){
+    public int getWidth() {
         return isValidWidth() ? textProperties.getWidth() : getDefaultWidth();
     }
 

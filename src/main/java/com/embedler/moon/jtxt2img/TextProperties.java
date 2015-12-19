@@ -19,15 +19,17 @@
 
 package com.embedler.moon.jtxt2img;
 
+import java.awt.*;
+
 public class TextProperties {
 
     private String bgColor;
     private String fgColor;
     private String text;
-
-    private Integer height;
-    private Integer width;
+    private int height;
+    private int width;
     private String format;
+    private Font font;
 
     public String getBgColor() {
         return bgColor;
@@ -53,19 +55,19 @@ public class TextProperties {
         this.text = text;
     }
 
-    public Integer getHeight() {
+    public int getHeight() {
         return height;
     }
 
-    public void setHeight(Integer height) {
+    public void setHeight(int height) {
         this.height = height;
     }
 
-    public Integer getWidth() {
+    public int getWidth() {
         return width;
     }
 
-    public void setWidth(Integer width) {
+    public void setWidth(int width) {
         this.width = width;
     }
 
@@ -75,5 +77,13 @@ public class TextProperties {
 
     public void setFormat(String format) {
         this.format = format;
+    }
+
+    public Font getFont() {
+        return font;
+    }
+
+    public void setFont(Font font) {
+        this.font = font;
     }
 }

@@ -17,7 +17,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.embedler.moon.jtxt2img;
+package com.embedler.moon.jtxt2img.mmap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import javax.imageio.ImageTypeSpecifier;
 import java.awt.*;
 import java.awt.image.*;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -39,8 +38,7 @@ import java.lang.reflect.UndeclaredThrowableException;
 public final class MappedImageFactory {
 
     private static final Logger LOG = LoggerFactory.getLogger(MappedImageFactory.class);
-
-    static final RasterFactory RASTER_FACTORY = createRasterFactory();
+    private static final RasterFactory RASTER_FACTORY = createRasterFactory();
 
     private MappedImageFactory() {
     }
