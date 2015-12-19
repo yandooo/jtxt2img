@@ -85,7 +85,7 @@ public class JTxt2Img {
         Rectangle2D rect = null;
 
         int fontSize = CoreHelper.DEF_PLACEHOLDER_FONT_SIZE;
-        final String fontName = currentFont.getFontName(CoreHelper.DEFAULT_LOCALE);
+        final String fontName = currentFont.getFontName();
         final int fontStyle = currentFont.getStyle();
 
         Font fontIterator = null;
