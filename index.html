@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <title>Jtxt2img by clajder</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Jtxt2img</h1>
+        <h2>Java Text to Image Library</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/clajder/jtxt2img/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/clajder/jtxt2img/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/clajder/jtxt2img" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>
+<a id="jtxt2img" class="anchor" href="#jtxt2img" aria-hidden="true"><span class="octicon octicon-link"></span></a>jtxt2img</h1>
+
+<p><a href="https://travis-ci.org/clajder/jtxt2img"><img src="https://travis-ci.org/clajder/jtxt2img.svg" alt="Build Status"></a>    <a href="https://bintray.com/clajder/maven/jtxt2img/_latestVersion"> <img src="https://api.bintray.com/packages/clajder/maven/jtxt2img/images/download.svg" alt="Download"> </a></p>
+
+<h2>
+<a id="java-text-to-image-library" class="anchor" href="#java-text-to-image-library" aria-hidden="true"><span class="octicon octicon-link"></span></a>Java Text to Image Library</h2>
+
+<p>This README documents the latest release, but master contains the current development version. </p>
+
+<h2>
+<a id="overview" class="anchor" href="#overview" aria-hidden="true"><span class="octicon octicon-link"></span></a>Overview</h2>
+
+<p>This is small pure java library to write text on image. 
+The library aims for real-life usage in production.</p>
+
+<p>It takes care of a text dimensions calculation and central its positioning on an image. </p>
+
+<h2>
+<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting started</h2>
+
+<p>Add the repositories:</p>
+
+<div class="highlight highlight-source-groovy-gradle"><pre><span class="pl-en">repositories</span> {
+    mavenCentral()
+    maven { url  <span class="pl-s"><span class="pl-pds">"</span>http://dl.bintray.com/clajder/maven<span class="pl-pds">"</span></span> }
+}</pre></div>
+
+<p>Dependency:</p>
+
+<div class="highlight highlight-source-groovy-gradle"><pre><span class="pl-en">dependencies</span> {
+  compile <span class="pl-s"><span class="pl-pds">'</span>com.embedler.moon:jtxt2img:INSERT_LATEST_VERSION_HERE<span class="pl-pds">'</span></span>
+}</pre></div>
+
+<p>How to use the latest build with Maven:</p>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">repository</span>&gt;
+    &lt;<span class="pl-ent">snapshots</span>&gt;
+        &lt;<span class="pl-ent">enabled</span>&gt;false&lt;/<span class="pl-ent">enabled</span>&gt;
+    &lt;/<span class="pl-ent">snapshots</span>&gt;
+    &lt;<span class="pl-ent">id</span>&gt;bintray-clajder-maven&lt;/<span class="pl-ent">id</span>&gt;
+    &lt;<span class="pl-ent">name</span>&gt;bintray&lt;/<span class="pl-ent">name</span>&gt;
+    &lt;<span class="pl-ent">url</span>&gt;http://dl.bintray.com/clajder/maven&lt;/<span class="pl-ent">url</span>&gt;
+&lt;/<span class="pl-ent">repository</span>&gt;</pre></div>
+
+<p>Dependency:</p>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;com.embedler.moon&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;jtxt2img&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;INSERT_LATEST_VERSION_HERE&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
+
+<h2>
+<a id="hello-world" class="anchor" href="#hello-world" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hello world</h2>
+
+<p>The main class <code>JTxt2Img</code> provides convenient interface to interact with library internals.</p>
+
+<div class="highlight highlight-source-java"><pre>
+<span class="pl-c">/** output file for generated image **/</span>            
+<span class="pl-smi">File</span> file <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">File</span>(outputDirectory, <span class="pl-s"><span class="pl-pds">"</span>image-0001.jpg<span class="pl-pds">"</span></span>);
+
+<span class="pl-c">/** calling builder and generate image with various parameters **/</span>
+<span class="pl-smi">JTxt2Img</span><span class="pl-k">.</span>withText(<span class="pl-smi">String</span><span class="pl-k">.</span>valueOf(i))
+        .backgroundColor(<span class="pl-s"><span class="pl-pds">"</span>487<span class="pl-pds">"</span></span>)
+        .foregroundColor(<span class="pl-s"><span class="pl-pds">"</span>278<span class="pl-pds">"</span></span>)
+        .format(<span class="pl-smi">ImgTextProperties</span><span class="pl-c1"><span class="pl-k">.</span>IMG_FORMAT<span class="pl-k">.</span>JPG</span>)
+        .width(<span class="pl-c1">50</span>)
+        .font(<span class="pl-smi">Font</span><span class="pl-k">.</span>getFont(<span class="pl-smi">Font</span><span class="pl-c1"><span class="pl-k">.</span>MONOSPACED</span>))
+        .height(<span class="pl-c1">90</span>)
+        .generate()
+        .write(file);</pre></div>
+
+<h2>
+<a id="build-it" class="anchor" href="#build-it" aria-hidden="true"><span class="octicon octicon-link"></span></a>Build it</h2>
+
+<p>Just clone the repo and type</p>
+
+<div class="highlight highlight-source-shell"><pre>./gradlew build</pre></div>
+
+<p>Running the tests:</p>
+
+<div class="highlight highlight-source-shell"><pre>./gradlew <span class="pl-c1">test</span></pre></div>
+
+<p>Installing in the local Maven repository:</p>
+
+<div class="highlight highlight-source-shell"><pre>./gradlew install</pre></div>
+
+<h2>
+<a id="details" class="anchor" href="#details" aria-hidden="true"><span class="octicon octicon-link"></span></a>Details</h2>
+
+<p>The implementation is in Java 7.</p>
+
+<p>The only runtime dependencies are Apache Commons Lang and Slf4j.</p>
+
+<p>License</p>
+
+<p>jtxt2img is licensed under the MIT License. 
+See <a href="https://github.com/clajder/jtxt2img/blob/master/LICENSE.md">LICENSE</a> for details.</p>
+
+<p>Copyright (c) 2016, Anton Y</p>
+
+<h2>
+<a id="feedback" class="anchor" href="#feedback" aria-hidden="true"><span class="octicon octicon-link"></span></a>Feedback</h2>
+
+<p>I would appreciate any feedback via Pull Request/Issue.</p>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
