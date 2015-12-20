@@ -60,19 +60,20 @@ Dependency:
 The main class `JTxt2Img` provides convenient interface to interact with library internals.
 
 ```java
-            /** output file for generated image **/            
-            File file = new File(outputDirectory, "image-0001.jpg");
 
-            /** calling builder and generate image with various parameters **/
-            JTxt2Img.withText(String.valueOf(i))
-                    .backgroundColor("487")
-                    .foregroundColor("278")
-                    .format(ImgTextProperties.IMG_FORMAT.JPG)
-                    .width(50)
-                    .font(Font.getFont(Font.MONOSPACED))
-                    .height(90)
-                    .generate()
-                    .write(file);
+/** output file for generated image **/            
+File file = new File(outputDirectory, "image-0001.jpg");
+
+/** calling builder and generate image with various parameters **/
+JTxt2Img.withText(String.valueOf(i))
+        .backgroundColor("487")
+        .foregroundColor("278")
+        .format(ImgTextProperties.IMG_FORMAT.JPG)
+        .width(50)
+        .font(Font.getFont(Font.MONOSPACED))
+        .height(90)
+        .generate()
+        .write(file);
 ```
 
 ## Build it
