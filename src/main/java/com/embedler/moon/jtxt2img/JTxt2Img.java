@@ -19,15 +19,13 @@
 
 package com.embedler.moon.jtxt2img;
 
-import com.embedler.moon.jtxt2img.mmap.MappedImageFactory;
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.IndexColorModel;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -35,140 +33,87 @@ import java.io.OutputStream;
 public class JTxt2Img {
 
     private static final Logger LOG = LoggerFactory.getLogger(JTxt2Img.class);
-    private static int BI_IMAGE_TYPE = BufferedImage.TYPE_BYTE_BINARY;
 
-    private static class ImageTextSettings {
+    private final ImgTextProperties imgTextProperties;
+    private final ImgTextPropertiesAccessor imgTextPropertiesAccessor;
+    private BufferedImage bufferedImage;
 
-        private Rectangle2D textBounds;
-        private Font font;
-        private int fontSize;
-
-        public Rectangle2D getTextBounds() {
-            return textBounds;
-        }
-
-        public void setTextBounds(Rectangle2D textBounds) {
-            this.textBounds = textBounds;
-        }
-
-        public Font getFont() {
-            return font;
-        }
-
-        public void setFont(Font font) {
-            this.font = font;
-        }
-
-        public int getFontSize() {
-            return fontSize;
-        }
-
-        public void setFontSize(int fontSize) {
-            this.fontSize = fontSize;
-        }
+    private JTxt2Img(ImgTextProperties imgTextProperties) {
+        this.imgTextProperties = imgTextProperties;
+        imgTextPropertiesAccessor = new ImgTextPropertiesAccessor(imgTextProperties);
     }
 
-    private static ImageTextSettings calculateImageTextSettings(TextProperties textProperties) {
+    public static JTxt2Img withText(final String text) {
+        Validate.notNull(text, "Image text must not be null");
 
-        final TextPropertiesAccessor textPropertiesAccessor = new TextPropertiesAccessor(textProperties);
-
-        final String text = textPropertiesAccessor.getText();
-        final int h = textPropertiesAccessor.getHeight();
-        final int w = textPropertiesAccessor.getWidth();
-        Font currentFont = textPropertiesAccessor.getFont();
-
-        ImageTextSettings imageTextSettings = new ImageTextSettings();
-
-        BufferedImage bufferedImage = new BufferedImage(1, 1, BI_IMAGE_TYPE);
-        Graphics2D g = bufferedImage.createGraphics();
-
-        Rectangle2D rect = null;
-
-        int fontSize = CoreHelper.DEF_PLACEHOLDER_FONT_SIZE;
-        final String fontName = currentFont.getFontName();
-        final int fontStyle = currentFont.getStyle();
-
-        Font fontIterator = null;
-        do {
-            fontSize--;
-            fontIterator = new Font(fontName, fontStyle, fontSize);
-            rect = getStringBoundsRectangle2D(g, text, fontIterator);
-        } while ((rect.getWidth() >= w || rect.getHeight() >= h) && (fontSize > 1));
-        g.dispose();
-        bufferedImage = null;
-
-        imageTextSettings.setFont(fontIterator);
-        imageTextSettings.setFontSize(fontSize);
-        imageTextSettings.setTextBounds(rect);
-
-        return imageTextSettings;
+        ImgTextProperties imgTextProperties = new ImgTextProperties();
+        imgTextProperties.setText(text);
+        return new JTxt2Img(imgTextProperties);
     }
 
-    private static Rectangle2D getStringBoundsRectangle2D(Graphics2D g, String title, Font font) {
-        g.setFont(font);
-        FontMetrics fm = g.getFontMetrics();
-        Rectangle2D rect = fm.getStringBounds(title, g);
-        return rect;
+    public static JTxt2Img withProperties(final ImgTextProperties imgTextProperties) {
+        Validate.notNull(imgTextProperties, "Properties must not be null");
+        ImgTextPropertiesAccessor imgTextPropertiesAccessor = new ImgTextPropertiesAccessor(imgTextProperties);
+        Validate.isTrue(imgTextPropertiesAccessor.isValidText());
+        return new JTxt2Img(imgTextProperties);
     }
 
-    public static BufferedImage createBufferedImage(TextProperties textProperties) {
-        final TextPropertiesAccessor textPropertiesAccessor = new TextPropertiesAccessor(textProperties);
-
-        final String textToDraw = textPropertiesAccessor.getText();
-        final int h = textPropertiesAccessor.getHeight();
-        final int w = textPropertiesAccessor.getWidth();
-        final Color bgColor = textPropertiesAccessor.getBackgroundColor();
-        final Color fgColor = textPropertiesAccessor.getForegroundColor();
-
-        ImageTextSettings imageTextSettings = calculateImageTextSettings(textProperties);
-        Rectangle2D textBounds = imageTextSettings.getTextBounds();
-
-        byte[] rmap = {(byte) bgColor.getRed(), (byte) fgColor.getRed()};
-        byte[] gmap = {(byte) bgColor.getGreen(), (byte) fgColor.getGreen()};
-        byte[] bmap = {(byte) bgColor.getBlue(), (byte) fgColor.getBlue()};
-
-        IndexColorModel indexColorModel = new IndexColorModel(1, 2, rmap, gmap, bmap);
-        BufferedImage mappedBufferedImage = MappedImageFactory.createCompatibleMappedImage(w, h, BI_IMAGE_TYPE, indexColorModel);
-
-        Graphics2D g = mappedBufferedImage.createGraphics();
-        g.setFont(imageTextSettings.getFont());
-        g.setBackground(bgColor);
-        g.setColor(fgColor);
-        g.drawString(textToDraw, (w - (int) Math.ceil(textBounds.getWidth())) / 2 - (int) textBounds.getX(), (h - (int) Math.ceil(textBounds.getHeight())) / 2 - (int) textBounds.getY());
-        g.dispose();
-
-        return mappedBufferedImage;
+    public JTxt2Img foregroundColor(final String colorCode) {
+        imgTextProperties.setFgColor(colorCode);
+        return this;
     }
 
-    public static boolean write(String fileName, BufferedImage image, String format) {
+    public JTxt2Img backgroundColor(final String colorCode) {
+        imgTextProperties.setBgColor(colorCode);
+        return this;
+    }
+
+    public JTxt2Img width(final int width) {
+        imgTextProperties.setWidth(width);
+        return this;
+    }
+
+    public JTxt2Img height(final int height) {
+        imgTextProperties.setHeight(height);
+        return this;
+    }
+
+    public JTxt2Img font(final Font font) {
+        imgTextProperties.setFont(font);
+        return this;
+    }
+
+    public JTxt2Img format(final ImgTextProperties.IMG_FORMAT imgFormat) {
+        imgTextProperties.setFormat(imgFormat);
+        return this;
+    }
+
+    public JTxt2Img generate() {
+        bufferedImage = ImageProcessor.forProperties(imgTextProperties).createBufferedImage();
+        return this;
+    }
+
+    public boolean write(File file) {
+        Validate.isTrue(file != null && file.getParentFile().exists(), "File must not be null and exists");
         boolean result = false;
-        try {
-            File file = File.createTempFile(fileName, "." + format);
-            result = write(file, image, format);
+        try (OutputStream os = new FileOutputStream(file)) {
+            result = write(os);
         } catch (Exception e) {
-            String msg = "Can't write image placeholder to the file [" + fileName + "]";
+            String msg = "Can't write image placeholder to the file {}";
             if (LOG.isErrorEnabled())
-                LOG.error(msg);
+                LOG.error(msg, file.getName());
             throw new JTxt2ImgIoRuntimeException(msg, e);
         }
         return result;
     }
 
-    public static boolean write(File file, BufferedImage image, String format) {
+    public boolean write(OutputStream outputStream) {
+        Validate.notNull(outputStream, "OutputStream must not be null");
+        Validate.notNull(bufferedImage, "Image must be generated before writing to output stream");
         boolean result = false;
-        try (OutputStream os = new FileOutputStream(file)) {
-            result = write(os, image, format);
-        } catch (Exception e) {
-
-        }
-
-        return result;
-    }
-
-    public static boolean write(OutputStream outputStream, BufferedImage image, String format) {
-        boolean result = false;
+        ImgTextPropertiesAccessor imgTextPropertiesAccessor = new ImgTextPropertiesAccessor(imgTextProperties);
         try {
-            result = ImageIO.write(image, format, outputStream);
+            result = ImageIO.write(bufferedImage, imgTextPropertiesAccessor.getFormat().name().toLowerCase(), outputStream);
             if (outputStream != null) {
                 try {
                     outputStream.close();

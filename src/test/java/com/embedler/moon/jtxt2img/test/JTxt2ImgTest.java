@@ -19,15 +19,16 @@
 
 package com.embedler.moon.jtxt2img.test;
 
+import com.embedler.moon.jtxt2img.ImgTextProperties;
 import com.embedler.moon.jtxt2img.JTxt2Img;
-import com.embedler.moon.jtxt2img.TextProperties;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.awt.image.BufferedImage;
+import java.awt.*;
 import java.io.File;
+import java.text.MessageFormat;
 
-public class ImgsTest {
+public class JTxt2ImgTest {
 
     private String outputDirectory;
 
@@ -38,26 +39,44 @@ public class ImgsTest {
 
     @Test
     public void simpleTest() {
-        TextProperties textProperties = new TextProperties();
+        ImgTextProperties imgTextProperties = new ImgTextProperties();
 
-        textProperties.setBgColor("167");
-        textProperties.setFgColor("945");
-        textProperties.setFormat("png");
-        textProperties.setWidth(10);
-        textProperties.setHeight(10);
+        imgTextProperties.setBgColor("167");
+        imgTextProperties.setFgColor("945");
+        imgTextProperties.setFormat(ImgTextProperties.IMG_FORMAT.JPG);
+        imgTextProperties.setWidth(10);
+        imgTextProperties.setHeight(10);
 
-        String fontsDir = outputDirectory + File.separator + "fonts";
+        String fontsDir = outputDirectory;
         new File(fontsDir).mkdirs();
         for (int i = 0; i < 9; i++) {
             String name = String.valueOf(1);
-            textProperties.setText(name);
-            BufferedImage bufferedImage = JTxt2Img.createBufferedImage(textProperties);
-            String fontFolder = fontsDir + File.separator + "font_1";
-            File file = new File(fontFolder);
-            file.mkdirs();
+            imgTextProperties.setText(name);
+            File file = new File(outputDirectory, "file-" + i);
+            JTxt2Img.withProperties(imgTextProperties).generate().write(file);
+        }
+    }
 
-            file = new File(fontFolder, name + ".png");
-            JTxt2Img.write(file, bufferedImage, "png");
+    @Test
+    public void simpleBuilderTest() {
+
+        String fontsDir = outputDirectory;
+
+        new File(fontsDir).mkdirs();
+        for (int i = 0; i < 9; i++) {
+
+            String fileName = MessageFormat.format("image-{0}.{1}", i, ImgTextProperties.IMG_FORMAT.JPG.toString().toLowerCase());
+            File file = new File(outputDirectory, fileName);
+
+            JTxt2Img.withText(String.valueOf(i))
+                    .backgroundColor("487")
+                    .foregroundColor("278")
+                    .format(ImgTextProperties.IMG_FORMAT.JPG)
+                    .width(50)
+                    .font(Font.getFont(Font.MONOSPACED))
+                    .height(90)
+                    .generate()
+                    .write(file);
         }
 
     }

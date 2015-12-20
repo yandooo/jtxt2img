@@ -21,15 +21,19 @@ package com.embedler.moon.jtxt2img;
 
 import java.awt.*;
 
-public class TextProperties {
+public class ImgTextProperties {
 
     private String bgColor;
     private String fgColor;
     private String text;
     private int height;
     private int width;
-    private String format;
+    private IMG_FORMAT format;
     private Font font;
+
+    public enum IMG_FORMAT{
+        PNG, JPG, GIF
+    }
 
     public String getBgColor() {
         return bgColor;
@@ -71,11 +75,11 @@ public class TextProperties {
         this.width = width;
     }
 
-    public String getFormat() {
+    public IMG_FORMAT getFormat() {
         return format;
     }
 
-    public void setFormat(String format) {
+    public void setFormat(IMG_FORMAT format) {
         this.format = format;
     }
 

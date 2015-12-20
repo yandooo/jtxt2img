@@ -20,8 +20,8 @@
 package com.embedler.moon.jtxt2img.test;
 
 import com.embedler.moon.jtxt2img.CoreHelper;
-import com.embedler.moon.jtxt2img.TextProperties;
-import com.embedler.moon.jtxt2img.TextPropertiesAccessor;
+import com.embedler.moon.jtxt2img.ImgTextProperties;
+import com.embedler.moon.jtxt2img.ImgTextPropertiesAccessor;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -29,68 +29,68 @@ public class TestPropertiesAccessorTest {
 
     @Test
     public void checkAllNull(){
-        TextProperties textProperties = new TextProperties();
-        TextPropertiesAccessor textPropertiesAccessor = new TextPropertiesAccessor(textProperties);
+        ImgTextProperties imgTextProperties = new ImgTextProperties();
+        ImgTextPropertiesAccessor imgTextPropertiesAccessor = new ImgTextPropertiesAccessor(imgTextProperties);
 
-        Assert.assertFalse(textPropertiesAccessor.isValid());
-        Assert.assertFalse(textPropertiesAccessor.isValidWidth());
-        Assert.assertFalse(textPropertiesAccessor.isValidHeight());
-        Assert.assertFalse(textPropertiesAccessor.isValidForegroundColor());
-        Assert.assertFalse(textPropertiesAccessor.isValidBackgroundColor());
-        Assert.assertFalse(textPropertiesAccessor.isValidFont());
-        Assert.assertFalse(textPropertiesAccessor.isValidFormat());
-        Assert.assertNotNull(textPropertiesAccessor.getDefaultText());
+        Assert.assertFalse(imgTextPropertiesAccessor.isValid());
+        Assert.assertFalse(imgTextPropertiesAccessor.isValidWidth());
+        Assert.assertFalse(imgTextPropertiesAccessor.isValidHeight());
+        Assert.assertFalse(imgTextPropertiesAccessor.isValidForegroundColor());
+        Assert.assertFalse(imgTextPropertiesAccessor.isValidBackgroundColor());
+        Assert.assertFalse(imgTextPropertiesAccessor.isValidFont());
+        Assert.assertFalse(imgTextPropertiesAccessor.isValidFormat());
+        Assert.assertNotNull(imgTextPropertiesAccessor.getDefaultText());
     }
 
     @Test
     public void checkWidth() {
-        TextProperties textProperties = new TextProperties();
-        textProperties.setWidth(-1);
+        ImgTextProperties imgTextProperties = new ImgTextProperties();
+        imgTextProperties.setWidth(-1);
 
-        TextPropertiesAccessor textPropertiesAccessor = new TextPropertiesAccessor(textProperties);
-        Assert.assertFalse(textPropertiesAccessor.isValidWidth());
+        ImgTextPropertiesAccessor imgTextPropertiesAccessor = new ImgTextPropertiesAccessor(imgTextProperties);
+        Assert.assertFalse(imgTextPropertiesAccessor.isValidWidth());
 
-        textProperties.setWidth(CoreHelper.DEF_PLACEHOLDER_MAX_WIDTH + 1);
-        Assert.assertFalse(textPropertiesAccessor.isValidWidth());
+        imgTextProperties.setWidth(CoreHelper.DEF_PLACEHOLDER_MAX_WIDTH + 1);
+        Assert.assertFalse(imgTextPropertiesAccessor.isValidWidth());
     }
 
     @Test
     public void checkHeight() {
-        TextProperties textProperties = new TextProperties();
-        textProperties.setHeight(-1);
+        ImgTextProperties imgTextProperties = new ImgTextProperties();
+        imgTextProperties.setHeight(-1);
 
-        TextPropertiesAccessor textPropertiesAccessor = new TextPropertiesAccessor(textProperties);
-        Assert.assertFalse(textPropertiesAccessor.isValidHeight());
+        ImgTextPropertiesAccessor imgTextPropertiesAccessor = new ImgTextPropertiesAccessor(imgTextProperties);
+        Assert.assertFalse(imgTextPropertiesAccessor.isValidHeight());
 
-        textProperties.setWidth(CoreHelper.DEF_PLACEHOLDER_MAX_HEIGHT + 1);
-        Assert.assertFalse(textPropertiesAccessor.isValidHeight());
+        imgTextProperties.setWidth(CoreHelper.DEF_PLACEHOLDER_MAX_HEIGHT + 1);
+        Assert.assertFalse(imgTextPropertiesAccessor.isValidHeight());
     }
 
     @Test
     public void checkFgColor() {
-        TextProperties textProperties = new TextProperties();
-        textProperties.setFgColor("765");
+        ImgTextProperties imgTextProperties = new ImgTextProperties();
+        imgTextProperties.setFgColor("765");
 
-        TextPropertiesAccessor textPropertiesAccessor = new TextPropertiesAccessor(textProperties);
-        Assert.assertTrue(textPropertiesAccessor.isValidForegroundColor());
-        Assert.assertNotNull(textPropertiesAccessor.getForegroundColor());
+        ImgTextPropertiesAccessor imgTextPropertiesAccessor = new ImgTextPropertiesAccessor(imgTextProperties);
+        Assert.assertTrue(imgTextPropertiesAccessor.isValidForegroundColor());
+        Assert.assertNotNull(imgTextPropertiesAccessor.getForegroundColor());
 
-        textProperties.setFgColor("-1");
+        imgTextProperties.setFgColor("-1");
 
-        Assert.assertFalse(textPropertiesAccessor.isValidForegroundColor());
+        Assert.assertFalse(imgTextPropertiesAccessor.isValidForegroundColor());
     }
 
     @Test
     public void checkBgColor() {
-        TextProperties textProperties = new TextProperties();
-        textProperties.setBgColor("345");
+        ImgTextProperties imgTextProperties = new ImgTextProperties();
+        imgTextProperties.setBgColor("345");
 
-        TextPropertiesAccessor textPropertiesAccessor = new TextPropertiesAccessor(textProperties);
-        Assert.assertTrue(textPropertiesAccessor.isValidBackgroundColor());
-        Assert.assertNotNull(textPropertiesAccessor.getBackgroundColor());
+        ImgTextPropertiesAccessor imgTextPropertiesAccessor = new ImgTextPropertiesAccessor(imgTextProperties);
+        Assert.assertTrue(imgTextPropertiesAccessor.isValidBackgroundColor());
+        Assert.assertNotNull(imgTextPropertiesAccessor.getBackgroundColor());
 
-        textProperties.setBgColor("-1");
+        imgTextProperties.setBgColor("-1");
 
-        Assert.assertFalse(textPropertiesAccessor.isValidBackgroundColor());
+        Assert.assertFalse(imgTextPropertiesAccessor.isValidBackgroundColor());
     }
 }

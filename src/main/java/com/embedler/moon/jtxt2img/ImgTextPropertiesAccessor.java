@@ -26,13 +26,13 @@ import org.apache.commons.lang3.math.NumberUtils;
 import java.awt.*;
 import java.util.regex.Matcher;
 
-public class TextPropertiesAccessor {
+public class ImgTextPropertiesAccessor {
 
-    private TextProperties textProperties;
+    private ImgTextProperties imgTextProperties;
 
-    public TextPropertiesAccessor(TextProperties textProperties) {
-        Validate.notNull(textProperties, "Text properties can not be null");
-        this.textProperties = textProperties;
+    public ImgTextPropertiesAccessor(ImgTextProperties imgTextProperties) {
+        Validate.notNull(imgTextProperties, "Text properties can not be null");
+        this.imgTextProperties = imgTextProperties;
     }
 
     public boolean isValid() {
@@ -44,7 +44,7 @@ public class TextPropertiesAccessor {
     }
 
     public boolean isValidFont() {
-        return textProperties.getFont() != null;
+        return imgTextProperties.getFont() != null;
     }
 
     public Font getDefaultFont() {
@@ -52,19 +52,19 @@ public class TextPropertiesAccessor {
     }
 
     public Font getFont() {
-        return isValidFont() ? textProperties.getFont() : getDefaultFont();
+        return isValidFont() ? imgTextProperties.getFont() : getDefaultFont();
     }
 
     public boolean isValidFormat() {
-        return StringUtils.isNotBlank(textProperties.getFormat());
+        return imgTextProperties.getFormat() != null;
     }
 
-    public String getFormat() {
-        return isValidFormat() ? textProperties.getFormat() : CoreHelper.DEF_PLACEHOLDER_FORMAT;
+    public ImgTextProperties.IMG_FORMAT getFormat() {
+        return isValidFormat() ? imgTextProperties.getFormat() : ImgTextProperties.IMG_FORMAT.JPG;
     }
 
     public boolean isValidText() {
-        return StringUtils.isNotBlank(textProperties.getText());
+        return StringUtils.isNotBlank(imgTextProperties.getText());
     }
 
     public String getDefaultText() {
@@ -72,13 +72,13 @@ public class TextPropertiesAccessor {
     }
 
     public String getText() {
-        return isValidText() ? textProperties.getText() : getDefaultText();
+        return isValidText() ? imgTextProperties.getText() : getDefaultText();
     }
 
     public boolean isValidForegroundColor() {
         boolean result = false;
-        if (StringUtils.isNotBlank(textProperties.getFgColor())) {
-            Matcher m = CoreHelper.COLOR_REGEXP.matcher(textProperties.getFgColor());
+        if (StringUtils.isNotBlank(imgTextProperties.getFgColor())) {
+            Matcher m = CoreHelper.COLOR_REGEXP.matcher(imgTextProperties.getFgColor());
             result = m.matches();
         }
         return result;
@@ -91,7 +91,7 @@ public class TextPropertiesAccessor {
     public Color getForegroundColor() {
         Color fgColor = getDefaultForegroundColor();
         if (isValidForegroundColor()) {
-            Matcher m = CoreHelper.COLOR_REGEXP.matcher(textProperties.getFgColor());
+            Matcher m = CoreHelper.COLOR_REGEXP.matcher(imgTextProperties.getFgColor());
             if (m.matches()) {
                 String temp = m.group(1);
                 if (NumberUtils.isNumber("0x" + temp)) {
@@ -108,8 +108,8 @@ public class TextPropertiesAccessor {
 
     public boolean isValidBackgroundColor() {
         boolean result = false;
-        if (StringUtils.isNotBlank(textProperties.getBgColor())) {
-            Matcher m = CoreHelper.COLOR_REGEXP.matcher(textProperties.getBgColor());
+        if (StringUtils.isNotBlank(imgTextProperties.getBgColor())) {
+            Matcher m = CoreHelper.COLOR_REGEXP.matcher(imgTextProperties.getBgColor());
             result = m.matches();
         }
         return result;
@@ -118,7 +118,7 @@ public class TextPropertiesAccessor {
     public Color getBackgroundColor() {
         Color bgColor = getDefaultBackgroundColor();
         if (isValidForegroundColor()) {
-            Matcher m = CoreHelper.COLOR_REGEXP.matcher(textProperties.getBgColor());
+            Matcher m = CoreHelper.COLOR_REGEXP.matcher(imgTextProperties.getBgColor());
             if (m.matches()) {
                 String temp = m.group(1);
                 if (NumberUtils.isNumber("0x" + temp)) {
@@ -138,20 +138,20 @@ public class TextPropertiesAccessor {
     }
 
     public boolean isValidWidth() {
-        int width = textProperties.getWidth();
+        int width = imgTextProperties.getWidth();
         return width <= CoreHelper.DEF_PLACEHOLDER_MAX_WIDTH && width >= CoreHelper.DEF_PLACEHOLDER_MIN_WIDTH;
     }
 
     public int getHeight() {
-        return isValidHeight() ? textProperties.getHeight() : getDefaultHeight();
+        return isValidHeight() ? imgTextProperties.getHeight() : getDefaultHeight();
     }
 
     public int getWidth() {
-        return isValidWidth() ? textProperties.getWidth() : getDefaultWidth();
+        return isValidWidth() ? imgTextProperties.getWidth() : getDefaultWidth();
     }
 
     public boolean isValidHeight() {
-        int height = textProperties.getHeight();
+        int height = imgTextProperties.getHeight();
         return height <= CoreHelper.DEF_PLACEHOLDER_MAX_HEIGHT && height >= CoreHelper.DEF_PLACEHOLDER_MIN_HEIGHT;
     }
 
