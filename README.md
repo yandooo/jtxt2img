@@ -5,7 +5,6 @@
 ## Java Text to Image Library
 
 This README documents the latest release, but master contains the current development version. 
-So please make sure to checkout the appropriate tag when looking for the version documented here.
 
 ## Overview
 
