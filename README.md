@@ -60,9 +60,8 @@ Dependency:
 The main class `JTxt2Img` provides convenient interface to interact with library internals.
 
 ```java
-            /** output file for generated image **/
-            String fileName = MessageFormat.format("image-{0}.{1}", i, ImgTextProperties.IMG_FORMAT.JPG.toString().toLowerCase());
-            File file = new File(outputDirectory, fileName);
+            /** output file for generated image **/            
+            File file = new File(outputDirectory, "image-0001.jpg");
 
             /** calling builder and generate image with various parameters **/
             JTxt2Img.withText(String.valueOf(i))
