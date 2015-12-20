@@ -108,3 +108,7 @@ jtxt2img is licensed under the MIT License.
 See [LICENSE](https://github.com/clajder/jtxt2img/blob/master/LICENSE.md) for details.
 
 Copyright (c) 2016, Anton Y
+
+## Feedback
+
+I would appreciate any feedback via Pull Request/Issue.
