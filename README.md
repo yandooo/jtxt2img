@@ -1,6 +1,6 @@
 # jtxt2img
 
-[![Build Status](https://travis-ci.org/oembedler/jtxt2img.svg)](https://travis-ci.org/oembedler/jtxt2img)    [ ![Download](https://api.bintray.com/packages/clajder/maven/jtxt2img/images/download.svg) ](https://bintray.com/clajder/maven/jtxt2img/_latestVersion)
+[![Build Status](https://travis-ci.org/oembedler/jtxt2img.svg)](https://travis-ci.org/oembedler/jtxt2img)    [ ![Download](https://api.bintray.com/packages/oembedler/maven/jtxt2img/images/download.svg) ](https://bintray.com/oembedler/maven/jtxt2img/_latestVersion)
 
 ## Java Text to Image Library
 
@@ -20,7 +20,7 @@ Add the repositories:
 ```gradle
 repositories {
     mavenCentral()
-    maven { url  "http://dl.bintray.com/clajder/maven" }
+    maven { url  "http://dl.bintray.com/oembedler/maven" }
 }
 ```
 
@@ -39,9 +39,9 @@ How to use the latest build with Maven:
     <snapshots>
         <enabled>false</enabled>
     </snapshots>
-    <id>bintray-clajder-maven</id>
+    <id>bintray-oembedler-maven</id>
     <name>bintray</name>
-    <url>http://dl.bintray.com/clajder/maven</url>
+    <url>http://dl.bintray.com/oembedler/maven</url>
 </repository>
 ```
 
@@ -105,7 +105,7 @@ The only runtime dependencies are Apache Commons Lang and Slf4j.
 License
 
 jtxt2img is licensed under the MIT License. 
-See [LICENSE](https://github.com/clajder/jtxt2img/blob/master/LICENSE.md) for details.
+See [LICENSE](https://github.com/oembedler/jtxt2img/blob/master/LICENSE.md) for details.
 
 Copyright (c) 2016, Anton Y
 
