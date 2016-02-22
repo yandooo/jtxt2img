@@ -1,6 +1,6 @@
 # jtxt2img
 
-[![Build Status](https://travis-ci.org/clajder/jtxt2img.svg)](https://travis-ci.org/clajder/jtxt2img)    [ ![Download](https://api.bintray.com/packages/clajder/maven/jtxt2img/images/download.svg) ](https://bintray.com/clajder/maven/jtxt2img/_latestVersion)
+[![Build Status](https://travis-ci.org/oembedler/jtxt2img.svg)](https://travis-ci.org/oembedler/jtxt2img)    [ ![Download](https://api.bintray.com/packages/clajder/maven/jtxt2img/images/download.svg) ](https://bintray.com/clajder/maven/jtxt2img/_latestVersion)
 
 ## Java Text to Image Library
 
